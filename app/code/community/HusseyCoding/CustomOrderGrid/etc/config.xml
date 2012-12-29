@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <HusseyCoding_CustomOrderGrid>
+            <version>1.0.0</version>
+        </HusseyCoding_CustomOrderGrid>
+    </modules>
+    <global>
+        <blocks>
+            <adminhtml>
+                <rewrite>
+                    <sales_order_grid>HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid</sales_order_grid>
+                </rewrite>
+            </adminhtml>
+        </blocks>
+        <models>
+            <customordergrid>
+                <class>HusseyCoding_CustomOrderGrid_Model</class>
+            </customordergrid>
+        </models>
+        <helpers>
+            <customordergrid>
+                <class>HusseyCoding_CustomOrderGrid_Helper</class>
+            </customordergrid>
+        </helpers>
+    </global>
+    <adminhtml>
+        <layout>
+            <updates>
+                <menupages>
+                    <file>customordergrid.xml</file>
+                </menupages>
+            </updates>
+        </layout>
+    </adminhtml>
+</config>

@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <customordergrid translate="label" module="customordergrid">
+            <label>Custom Order Grid</label>
+            <tab>husseycoding</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>1</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <configure translate="label">
+                    <label>Configure Order Grid</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <columns>
+                            <label>Show Columns</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>customordergrid/system_config_source_columns</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                            <comment>Order # will always show</comment>
+                        </columns>
+                        <columnsorder>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </columnsorder>
+                        <columnsort>
+                            <label>Default Sort Column</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>customordergrid/system_config_source_sort</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                            <comment>Defaults to Order #</comment>
+                        </columnsort>
+                        <sortdirection>
+                            <label>Default Column Sort Direction</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>customordergrid/system_config_source_direction</source_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </sortdirection>
+                    </fields>
+                </configure>
+            </groups>
+        </customordergrid>
+    </sections>
+</config>
