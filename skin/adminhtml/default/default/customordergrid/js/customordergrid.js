@@ -7,35 +7,14 @@ var selected = Class.create({
             this.userselected = new Array();
         }
         this.getText();
-        Event.observe($("customordergrid_configure_columns"), "mouseup", this.userSelect.bindAsEventListener(this));
+        Event.observe($("customordergrid_configure_columns"), "change", this.updateForm.bindAsEventListener(this));
         $('row_customordergrid_configure_columns').insert({ after: '<tr><td class="label">Column Display Order</td><td id="displaycolumnorder" class="value"></td></tr>' });
         this.outputOrder();
         this.updateSortElement();
     },
-    userSelect: function(e) {
-        if (!e.target.id) {
-            var id = e.target.value;
-            var selected = e.target.selected;
-            this.manageColumn(id, selected);
-        }
-    },
-    manageColumn: function(id, selected) {
-        if ($F("customordergrid_configure_columns").length <= 1) {
-            this.userselected = $F("customordergrid_configure_columns");
-            this.updateForm();
-        } else if ($F("customordergrid_configure_columns").length > (this.userselected.length + 1) || $F("customordergrid_configure_columns").length < (this.userselected.length - 1)) {
-            this.userselected = $F("customordergrid_configure_columns");
-            this.updateForm();
-        } else if (selected && ($F("customordergrid_configure_columns").length > this.userselected.length)) {
-            this.addColumn(id);
-        } else {
-            this.removeColumn(id);
-        }
-    },
     addColumn: function(id) {
         if (this.userselected.indexOf(id) == -1) {
             this.userselected.push(id);
-            this.updateForm();
         }
     },
     removeColumn: function(id) {
@@ -47,7 +26,6 @@ var selected = Class.create({
             }
             count++;
         }.bind(this));
-        this.updateForm();
     },
     updateForm: function() {
         this.checkForm();
@@ -94,6 +72,7 @@ var selected = Class.create({
             } else if (el.value && el.value != "real_order_id") {
                 if (el.selected) {
                     el.selected = false;
+                    $("customordergrid_configure_columnsort").options[0].selected  = true;
                 }
                 el.disabled = true;
             }
