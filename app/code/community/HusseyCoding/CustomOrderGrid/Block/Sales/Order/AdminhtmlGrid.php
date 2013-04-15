@@ -33,16 +33,23 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
                 'main_table.entity_id = order.entity_id'
             );
         if (in_array('sku', $this->_selected)):
+            $skuquery = clone $select;
+            $skuquery
+                ->reset()
+                ->from(
+                    array('item_table' => $resource->getTableName('sales/order_item')),
+                    array(new Zend_Db_Expr('GROUP_CONCAT(CONCAT_WS(" x ", TRIM(TRAILING "." FROM TRIM(TRAILING "0" FROM qty_ordered)), sku) SEPARATOR ", ") as sku, order_id'))
+                )
+                ->group('item_table.order_id');
+            
             $select
                 ->join(
-                    array('order_item' => $resource->getTableName('sales/order_item')),
-                    'main_table.entity_id = order_item.order_id',
-                    array('sku' => new Zend_Db_Expr('GROUP_CONCAT(sku SEPARATOR ", ")'))
-                )
-                ->group('order_id');
+                    array('sku_table' => $skuquery),
+                    'main_table.entity_id = sku_table.order_id',
+                    array('sku')
+                );
         endif;
         
-        $tester = (string) $select;
         $this->setCollection($collection);
         return Mage_Adminhtml_Block_Widget_Grid::_prepareCollection();
     }
