@@ -13,6 +13,8 @@ class HusseyCoding_CustomOrderGrid_Model_System_Config_Source_Sort
             array('value' => 'shipping_name', 'label'=>Mage::helper('adminhtml')->__('Ship to Name')),
             array('value' => 'base_grand_total', 'label'=>Mage::helper('adminhtml')->__('G.T. (Base)')),
             array('value' => 'grand_total', 'label'=>Mage::helper('adminhtml')->__('G.T. (Purchased)')),
+            array('value' => 'billing_company', 'label'=>Mage::helper('adminhtml')->__('Billing Company')),
+            array('value' => 'shipping_company', 'label'=>Mage::helper('adminhtml')->__('Ship to Company')),
             array('value' => 'status', 'label'=>Mage::helper('adminhtml')->__('Status')),
             array('value' => 'sku', 'label'=>Mage::helper('adminhtml')->__('SKU')),
             array('value' => 'shipping_description', 'label'=>Mage::helper('adminhtml')->__('Shipping Method')),

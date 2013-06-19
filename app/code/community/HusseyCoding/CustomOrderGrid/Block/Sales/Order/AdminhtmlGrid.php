@@ -31,7 +31,20 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
             ->join(
                 array('order' => $resource->getTableName('sales/order')),
                 'main_table.entity_id = order.entity_id'
-            );
+            )
+            ->join(
+                array('billing_company' => $resource->getTableName('sales/order_address')),
+                'main_table.entity_id = billing_company.parent_id',
+                array('billing_company' => 'company')
+            )
+            ->where('billing_company.address_type = ?', 'billing')
+            ->join(
+                array('shipping_company' => $resource->getTableName('sales/order_address')),
+                'main_table.entity_id = shipping_company.parent_id',
+                array('shipping_company' => 'company')
+            )
+            ->where('shipping_company.address_type = ?', 'shipping');
+        
         if (in_array('sku', $this->_selected)):
             $skuquery = clone $select;
             $skuquery
@@ -159,6 +172,20 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
                     'filter_index' => 'main_table.grand_total',
                     'type'  => 'currency',
                     'currency' => 'order_currency_code',
+                ));
+                break;
+            case 'billing_company':
+                $this->addColumn('billing_company', array(
+                    'header' => Mage::helper('sales')->__('Billing Company'),
+                    'index' => 'billing_company',
+                    'filter_index' => 'billing_company.company'
+                ));
+                break;
+            case 'shipping_company':
+                $this->addColumn('shipping_company', array(
+                    'header' => Mage::helper('sales')->__('Ship to Company'),
+                    'index' => 'shipping_company',
+                    'filter_index' => 'shipping_company.company'
                 ));
                 break;
             case 'status':
