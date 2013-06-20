@@ -31,19 +31,61 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
             ->join(
                 array('order' => $resource->getTableName('sales/order')),
                 'main_table.entity_id = order.entity_id'
-            )
-            ->join(
+            );
+        
+        if (in_array('billing_company', $this->_selected)):
+            $select->join(
                 array('billing_company' => $resource->getTableName('sales/order_address')),
                 'main_table.entity_id = billing_company.parent_id',
                 array('billing_company' => 'company')
             )
-            ->where('billing_company.address_type = ?', 'billing')
-            ->join(
+            ->where('billing_company.address_type = ?', 'billing');
+        endif;
+        
+        if (in_array('shipping_company', $this->_selected)):
+            $select->join(
                 array('shipping_company' => $resource->getTableName('sales/order_address')),
                 'main_table.entity_id = shipping_company.parent_id',
                 array('shipping_company' => 'company')
             )
             ->where('shipping_company.address_type = ?', 'shipping');
+        endif;
+        
+        if (in_array('billing_postcode', $this->_selected)):
+            $select->join(
+                array('billing_postcode' => $resource->getTableName('sales/order_address')),
+                'main_table.entity_id = billing_postcode.parent_id',
+                array('billing_postcode' => 'postcode')
+            )
+            ->where('billing_postcode.address_type = ?', 'billing');
+        endif;
+        
+        if (in_array('shipping_postcode', $this->_selected)):
+            $select->join(
+                array('shipping_postcode' => $resource->getTableName('sales/order_address')),
+                'main_table.entity_id = shipping_postcode.parent_id',
+                array('shipping_postcode' => 'postcode')
+            )
+            ->where('shipping_postcode.address_type = ?', 'shipping');
+        endif;
+        
+        if (in_array('billing_country', $this->_selected)):
+            $select->join(
+                array('billing_country' => $resource->getTableName('sales/order_address')),
+                'main_table.entity_id = billing_country.parent_id',
+                array('billing_country' => 'country_id')
+            )
+            ->where('billing_country.address_type = ?', 'billing');
+        endif;
+        
+        if (in_array('shipping_country', $this->_selected)):
+            $select->join(
+                array('shipping_country' => $resource->getTableName('sales/order_address')),
+                'main_table.entity_id = shipping_country.parent_id',
+                array('shipping_country' => 'country_id')
+            )
+            ->where('shipping_country.address_type = ?', 'shipping');
+        endif;
         
         if (in_array('sku', $this->_selected)):
             $skuquery = clone $select;
@@ -301,6 +343,34 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
                     'index' => 'total_item_count',
                     'filter_index' => 'order.total_item_count',
                     'type'  => 'currency'
+                ));
+                break;
+            case 'billing_postcode':
+                $this->addColumn('billing_postcode', array(
+                    'header' => Mage::helper('sales')->__('Billing Postcode'),
+                    'index' => 'billing_postcode',
+                    'filter_index' => 'billing_postcode.postcode'
+                ));
+                break;
+            case 'shipping_postcode':
+                $this->addColumn('shipping_postcode', array(
+                    'header' => Mage::helper('sales')->__('Ship to Postcode'),
+                    'index' => 'shipping_postcode',
+                    'filter_index' => 'shipping_postcode.postcode'
+                ));
+                break;
+            case 'billing_country':
+                $this->addColumn('billing_country', array(
+                    'header' => Mage::helper('sales')->__('Billing Country'),
+                    'index' => 'billing_country',
+                    'filter_index' => 'billing_country.country_id'
+                ));
+                break;
+            case 'shipping_country':
+                $this->addColumn('shipping_country', array(
+                    'header' => Mage::helper('sales')->__('Ship to Country'),
+                    'index' => 'shipping_country',
+                    'filter_index' => 'shipping_country.country_id'
                 ));
                 break;
         endswitch;
