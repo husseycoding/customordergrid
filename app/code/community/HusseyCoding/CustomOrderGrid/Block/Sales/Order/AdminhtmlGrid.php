@@ -1,19 +1,22 @@
 <?php
 class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_Adminhtml_Block_Sales_Order_Grid
 {
+    private $_enabled;
     private $_selected;
             
     public function __construct()
     {
         parent::__construct();
+        $enabled = Mage::getStoreConfig('customordergrid/configure/enabled');
+        $this->_enabled = isset($enabled) && $enabled ? true : false;
         $columnsort = Mage::getStoreConfig('customordergrid/configure/columnsort');
         $selected = Mage::getStoreConfig('customordergrid/configure/columnsorder');
-        $this->_selected = $selected ? explode(',', Mage::getStoreConfig('customordergrid/configure/columnsorder')) : false;
+        $this->_selected = isset($selected) && $selected ? explode(',', $selected) : false;
         if (!$columnsort):
             $columnsort = 'real_order_id';
         endif;
         $sortdirection = Mage::getStoreConfig('customordergrid/configure/sortdirection') ? Mage::getStoreConfig('customordergrid/configure/sortdirection') : 'DESC';
-        if ($this->_selected):
+        if ($this->_selected && $this->_enabled):
             $this->setDefaultSort($columnsort);
             $this->setDefaultDir($sortdirection);
         endif;
@@ -21,7 +24,7 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
     
     protected function _prepareCollection()
     {
-        if (!$this->_selected) return parent::_prepareCollection();
+        if (!$this->_selected || !$this->_enabled) return parent::_prepareCollection();
         
         $collection = Mage::getResourceModel($this->_getCollectionClass());
         $select = $collection->getSelect();
@@ -43,12 +46,18 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
         endif;
         
         if (in_array('shipping_company', $this->_selected)):
-            $select->join(
-                array('shipping_company' => $resource->getTableName('sales/order_address')),
+            $shipcompanyquery = clone $select;
+            $shipcompanyquery
+                ->reset()
+                ->from(
+                    array('shipping_company_table' => $resource->getTableName('sales/order_address'))
+                )
+                ->where('shipping_company_table.address_type = ?', 'shipping');
+            $select->joinLeft(
+                array('shipping_company' => $shipcompanyquery),
                 'main_table.entity_id = shipping_company.parent_id',
                 array('shipping_company' => 'company')
-            )
-            ->where('shipping_company.address_type = ?', 'shipping');
+            );
         endif;
         
         if (in_array('billing_postcode', $this->_selected)):
@@ -61,12 +70,18 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
         endif;
         
         if (in_array('shipping_postcode', $this->_selected)):
-            $select->join(
-                array('shipping_postcode' => $resource->getTableName('sales/order_address')),
+            $shippostcodequery = clone $select;
+            $shippostcodequery
+                ->reset()
+                ->from(
+                    array('shipping_postcode_table' => $resource->getTableName('sales/order_address'))
+                )
+                ->where('shipping_postcode_table.address_type = ?', 'shipping');
+            $select->joinLeft(
+                array('shipping_postcode' => $shippostcodequery),
                 'main_table.entity_id = shipping_postcode.parent_id',
                 array('shipping_postcode' => 'postcode')
-            )
-            ->where('shipping_postcode.address_type = ?', 'shipping');
+            );
         endif;
         
         if (in_array('billing_country', $this->_selected)):
@@ -79,12 +94,18 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
         endif;
         
         if (in_array('shipping_country', $this->_selected)):
-            $select->join(
-                array('shipping_country' => $resource->getTableName('sales/order_address')),
+            $shipcountryquery = clone $select;
+            $shipcountryquery
+                ->reset()
+                ->from(
+                    array('shipping_country_table' => $resource->getTableName('sales/order_address'))
+                )
+                ->where('shipping_country_table.address_type = ?', 'shipping');
+            $select->joinLeft(
+                array('shipping_country' => $shipcountryquery),
                 'main_table.entity_id = shipping_country.parent_id',
                 array('shipping_country' => 'country_id')
-            )
-            ->where('shipping_country.address_type = ?', 'shipping');
+            );
         endif;
         
         if (in_array('sku', $this->_selected)):
@@ -111,7 +132,7 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
 
     protected function _prepareColumns()
     {
-        if (!$this->_selected) return parent::_prepareColumns();
+        if (!$this->_selected || !$this->_enabled) return parent::_prepareColumns();
         
         $this->addColumn('real_order_id', array(
             'header'=> Mage::helper('sales')->__('Order #'),
