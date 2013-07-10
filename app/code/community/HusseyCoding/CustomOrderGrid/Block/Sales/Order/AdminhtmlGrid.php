@@ -39,23 +39,16 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
         if (in_array('billing_company', $this->_selected)):
             $select->join(
                 array('billing_company' => $resource->getTableName('sales/order_address')),
-                'main_table.entity_id = billing_company.parent_id',
+                'order.billing_address_id = billing_company.entity_id',
                 array('billing_company' => 'company')
             )
             ->where('billing_company.address_type = ?', 'billing');
         endif;
         
         if (in_array('shipping_company', $this->_selected)):
-            $shipcompanyquery = clone $select;
-            $shipcompanyquery
-                ->reset()
-                ->from(
-                    array('shipping_company_table' => $resource->getTableName('sales/order_address'))
-                )
-                ->where('shipping_company_table.address_type = ?', 'shipping');
             $select->joinLeft(
-                array('shipping_company' => $shipcompanyquery),
-                'main_table.entity_id = shipping_company.parent_id',
+                array('shipping_company' => $resource->getTableName('sales/order_address')),
+                'order.shipping_address_id = shipping_company.entity_id',
                 array('shipping_company' => 'company')
             );
         endif;
@@ -63,23 +56,16 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
         if (in_array('billing_postcode', $this->_selected)):
             $select->join(
                 array('billing_postcode' => $resource->getTableName('sales/order_address')),
-                'main_table.entity_id = billing_postcode.parent_id',
+                'order.billing_address_id = billing_postcode.entity_id',
                 array('billing_postcode' => 'postcode')
             )
             ->where('billing_postcode.address_type = ?', 'billing');
         endif;
         
         if (in_array('shipping_postcode', $this->_selected)):
-            $shippostcodequery = clone $select;
-            $shippostcodequery
-                ->reset()
-                ->from(
-                    array('shipping_postcode_table' => $resource->getTableName('sales/order_address'))
-                )
-                ->where('shipping_postcode_table.address_type = ?', 'shipping');
             $select->joinLeft(
-                array('shipping_postcode' => $shippostcodequery),
-                'main_table.entity_id = shipping_postcode.parent_id',
+                array('shipping_postcode' => $resource->getTableName('sales/order_address')),
+                'order.shipping_address_id = shipping_postcode.entity_id',
                 array('shipping_postcode' => 'postcode')
             );
         endif;
@@ -87,43 +73,28 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
         if (in_array('billing_country', $this->_selected)):
             $select->join(
                 array('billing_country' => $resource->getTableName('sales/order_address')),
-                'main_table.entity_id = billing_country.parent_id',
+                'order.billing_address_id = billing_country.entity_id',
                 array('billing_country' => 'country_id')
             )
             ->where('billing_country.address_type = ?', 'billing');
         endif;
         
         if (in_array('shipping_country', $this->_selected)):
-            $shipcountryquery = clone $select;
-            $shipcountryquery
-                ->reset()
-                ->from(
-                    array('shipping_country_table' => $resource->getTableName('sales/order_address'))
-                )
-                ->where('shipping_country_table.address_type = ?', 'shipping');
             $select->joinLeft(
-                array('shipping_country' => $shipcountryquery),
-                'main_table.entity_id = shipping_country.parent_id',
+                array('shipping_country' => $resource->getTableName('sales/order_address')),
+                'order.shipping_address_id = shipping_country.entity_id',
                 array('shipping_country' => 'country_id')
             );
         endif;
         
         if (in_array('sku', $this->_selected)):
-            $skuquery = clone $select;
-            $skuquery
-                ->reset()
-                ->from(
-                    array('item_table' => $resource->getTableName('sales/order_item')),
-                    array(new Zend_Db_Expr('GROUP_CONCAT(CONCAT_WS(" x ", TRIM(TRAILING "." FROM TRIM(TRAILING "0" FROM qty_ordered)), sku) SEPARATOR ", ") as sku, order_id'))
-                )
-                ->group('item_table.order_id');
-            
             $select
                 ->join(
-                    array('sku_table' => $skuquery),
+                    array('sku_table' => $resource->getTableName('sales/order_item')),
                     'main_table.entity_id = sku_table.order_id',
-                    array('sku')
-                );
+                    array(new Zend_Db_Expr('GROUP_CONCAT(CONCAT_WS(" x ", TRIM(TRAILING "." FROM TRIM(TRAILING "0" FROM qty_ordered)), sku) SEPARATOR ", ") as sku'))
+                )
+                ->group('sku_table.order_id');
         endif;
         
         $this->setCollection($collection);
