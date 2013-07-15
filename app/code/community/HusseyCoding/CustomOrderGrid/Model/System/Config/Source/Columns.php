@@ -12,7 +12,8 @@ class HusseyCoding_CustomOrderGrid_Model_System_Config_Source_Columns
                     array('value' => 'updated_at', 'label' => Mage::helper('adminhtml')->__('Order Modified')),
                     array('value' => 'status', 'label' => Mage::helper('adminhtml')->__('Status')),
                     array('value' => 'shipping_description', 'label' => Mage::helper('adminhtml')->__('Shipping Method')),
-                    array('value' => 'order_currency_code', 'label' => Mage::helper('adminhtml')->__('Currency'))
+                    array('value' => 'order_currency_code', 'label' => Mage::helper('adminhtml')->__('Currency')),
+                    array('value' => 'method', 'label' => Mage::helper('adminhtml')->__('Payment Method'))
                 ),
             ),
             array(
@@ -32,6 +33,7 @@ class HusseyCoding_CustomOrderGrid_Model_System_Config_Source_Columns
                 'label' => 'Product Information',
                 'value' => array(
                     array('value' => 'sku', 'label' => Mage::helper('adminhtml')->__('SKU')),
+                    array('value' => 'is_virtual', 'label' => Mage::helper('adminhtml')->__('Is Virtual')),
                     array('value' => 'coupon_code', 'label' => Mage::helper('adminhtml')->__('Coupon Code')),
                     array('value' => 'total_item_count', 'label' => Mage::helper('adminhtml')->__('Product Count'))
                 ),
@@ -45,6 +47,8 @@ class HusseyCoding_CustomOrderGrid_Model_System_Config_Source_Columns
                     array('value' => 'shipping_company', 'label' => Mage::helper('adminhtml')->__('Ship to Company')),
                     array('value' => 'billing_postcode', 'label' => Mage::helper('adminhtml')->__('Billing Postcode')),
                     array('value' => 'shipping_postcode', 'label' => Mage::helper('adminhtml')->__('Ship to Postcode')),
+                    array('value' => 'billing_region', 'label' => Mage::helper('adminhtml')->__('Billing Region')),
+                    array('value' => 'shipping_region', 'label' => Mage::helper('adminhtml')->__('Ship to Region')),
                     array('value' => 'billing_country', 'label' => Mage::helper('adminhtml')->__('Billing Country')),
                     array('value' => 'shipping_country', 'label' => Mage::helper('adminhtml')->__('Ship to Country')),
                     array('value' => 'customer_email', 'label' => Mage::helper('adminhtml')->__('Customer Email')),
