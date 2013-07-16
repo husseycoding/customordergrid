@@ -63,14 +63,23 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
             );
         endif;
         
+        
         if (in_array('sku', $this->_selected)):
+            $skuquery = clone $select;
+            $skuquery
+                ->reset()
+                ->from(
+                    array('item_table' => $resource->getTableName('sales/order_item')),
+                    array(new Zend_Db_Expr('GROUP_CONCAT(CONCAT_WS(" x ", TRIM(TRAILING "." FROM TRIM(TRAILING "0" FROM qty_ordered)), sku) SEPARATOR ", ") as sku, order_id'))
+                )
+                ->group('item_table.order_id');
+            
             $select
                 ->join(
-                    array('sku_table' => $resource->getTableName('sales/order_item')),
+                    array('sku_table' => $skuquery),
                     'main_table.entity_id = sku_table.order_id',
-                    array(new Zend_Db_Expr('GROUP_CONCAT(CONCAT_WS(" x ", TRIM(TRAILING "." FROM TRIM(TRAILING "0" FROM qty_ordered)), sku) SEPARATOR ", ") as sku'))
-                )
-                ->group('sku_table.order_id');
+                    array('sku')
+                );
         endif;
         
         $this->setCollection($collection);

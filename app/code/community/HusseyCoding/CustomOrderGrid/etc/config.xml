@@ -2,7 +2,7 @@
 <config>
     <modules>
         <HusseyCoding_CustomOrderGrid>
-            <version>1.0.7</version>
+            <version>1.0.8</version>
         </HusseyCoding_CustomOrderGrid>
     </modules>
     <global>
