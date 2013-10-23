@@ -56,8 +56,10 @@ var selected = Class.create({
         var html = new Array();
         var hidden = new Array();
         this.userselected.each(function(s) {
-            html.push(this.valuetext[s]);
-            hidden.push(s);
+            if (this.valuetext[s]) {
+                html.push(this.valuetext[s]);
+                hidden.push(s);
+            }
         }.bind(this));
         hidden = hidden.join(",");
         html = html.join("<br />");

@@ -11,7 +11,7 @@ class HusseyCoding_CustomOrderGrid_Model_System_Config_Source_Columns
                     array('value' => 'store_id', 'label' => Mage::helper('adminhtml')->__('Purchased From (Store)')),
                     array('value' => 'updated_at', 'label' => Mage::helper('adminhtml')->__('Order Modified')),
                     array('value' => 'status', 'label' => Mage::helper('adminhtml')->__('Status')),
-                    array('value' => 'shipping_description', 'label' => Mage::helper('adminhtml')->__('Shipping Method')),
+                    array('value' => 'shipping_method', 'label' => Mage::helper('adminhtml')->__('Shipping Method')),
                     array('value' => 'order_currency_code', 'label' => Mage::helper('adminhtml')->__('Currency')),
                     array('value' => 'method', 'label' => Mage::helper('adminhtml')->__('Payment Method'))
                 ),
@@ -33,6 +33,7 @@ class HusseyCoding_CustomOrderGrid_Model_System_Config_Source_Columns
                 'label' => 'Product Information',
                 'value' => array(
                     array('value' => 'sku', 'label' => Mage::helper('adminhtml')->__('SKU')),
+                    array('value' => 'name', 'label' => Mage::helper('adminhtml')->__('Product Name')),
                     array('value' => 'is_virtual', 'label' => Mage::helper('adminhtml')->__('Is Virtual')),
                     array('value' => 'coupon_code', 'label' => Mage::helper('adminhtml')->__('Coupon Code')),
                     array('value' => 'total_item_count', 'label' => Mage::helper('adminhtml')->__('Product Count'))

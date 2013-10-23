@@ -64,21 +64,25 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
         endif;
         
         
-        if (in_array('sku', $this->_selected)):
+        if (in_array('sku', $this->_selected) || in_array('name', $this->_selected)):
             $skuquery = clone $select;
             $skuquery
                 ->reset()
                 ->from(
                     array('item_table' => $resource->getTableName('sales/order_item')),
-                    array(new Zend_Db_Expr('GROUP_CONCAT(CONCAT_WS(" x ", TRIM(TRAILING "." FROM TRIM(TRAILING "0" FROM qty_ordered)), sku) SEPARATOR ", ") as sku, order_id'))
+                    array(new Zend_Db_Expr('
+                        GROUP_CONCAT(CONCAT_WS(" x ", TRIM(TRAILING "." FROM TRIM(TRAILING "0" FROM qty_ordered)), sku) SEPARATOR ", ") as sku,
+                        GROUP_CONCAT(name SEPARATOR ", ") as name,
+                        order_id'))
                 )
+                ->where('product_type IN (?)', array('simple', 'downloadable', 'virtual'))
                 ->group('item_table.order_id');
             
             $select
                 ->join(
                     array('sku_table' => $skuquery),
                     'main_table.entity_id = sku_table.order_id',
-                    array('sku')
+                    array('sku', 'name')
                 );
         endif;
         
@@ -224,6 +228,13 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
                     'width' => '80px'
                 ));
                 break;
+            case 'name':
+                $this->addColumn('name', array(
+                    'header' => Mage::helper('sales')->__('Product Name'),
+                    'index' => 'name',
+                    'filter_index' => 'sku_table.name'
+                ));
+                break;
             case 'is_virtual':
                 $this->addColumn('is_virtual', array(
                     'header' => Mage::helper('sales')->__('Is Virtual'),
@@ -233,10 +244,12 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
                     'options' => Mage::helper('customordergrid')->virtualStatuses()
                 ));
                 break;
-            case 'shipping_description':
-                $this->addColumn('shipping_description', array(
+            case 'shipping_method':
+                $this->addColumn('shipping_method', array(
                     'header' => Mage::helper('sales')->__('Shipping Method'),
-                    'index' => 'shipping_description'
+                    'index' => 'shipping_method',
+                    'type'  => 'options',
+                    'options' => Mage::helper('customordergrid')->shippingMethods()
                 ));
                 break;
             case 'coupon_code':
@@ -327,7 +340,9 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
                 $this->addColumn('method', array(
                     'header' => Mage::helper('sales')->__('Payment Method'),
                     'index' => 'method',
-                    'filter_index' => 'payment_method.method'
+                    'filter_index' => 'payment_method.method',
+                    'type'  => 'options',
+                    'options' => Mage::helper('customordergrid')->paymentMethods()
                 ));
                 break;
             case 'total_item_count':

@@ -7,16 +7,16 @@
             <frontend_type>text</frontend_type>
             <sort_order>1</sort_order>
             <show_in_default>1</show_in_default>
-            <show_in_website>1</show_in_website>
-            <show_in_store>1</show_in_store>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
             <groups>
                 <configure translate="label">
                     <label>Configure Order Grid</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>1</sort_order>
                     <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
                     <fields>
                         <enabled>
                             <label>Enabled</label>
@@ -24,8 +24,8 @@
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
                         </enabled>
                         <columns>
                             <label>Show Columns</label>
@@ -33,8 +33,8 @@
                             <source_model>customordergrid/system_config_source_columns</source_model>
                             <sort_order>2</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
                             <can_be_empty>1</can_be_empty>
                             <comment>Order # will always show</comment>
                         </columns>
@@ -42,8 +42,8 @@
                             <frontend_type>textarea</frontend_type>
                             <sort_order>3</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
                         </columnsorder>
                         <columnsort>
                             <label>Default Sort Column</label>
@@ -51,8 +51,8 @@
                             <source_model>customordergrid/system_config_source_sort</source_model>
                             <sort_order>4</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
                             <can_be_empty>1</can_be_empty>
                             <comment>Defaults to Order #</comment>
                         </columnsort>
@@ -62,8 +62,8 @@
                             <source_model>customordergrid/system_config_source_direction</source_model>
                             <sort_order>5</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
                             <can_be_empty>1</can_be_empty>
                         </sortdirection>
                     </fields>
