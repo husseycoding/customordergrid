@@ -12,6 +12,7 @@ class HusseyCoding_CustomOrderGrid_Model_System_Config_Source_Sort
             array('value' => 'shipping_method', 'label' => Mage::helper('adminhtml')->__('Shipping Method')),
             array('value' => 'order_currency_code', 'label' => Mage::helper('adminhtml')->__('Currency')),
             array('value' => 'method', 'label' => Mage::helper('adminhtml')->__('Payment Method')),
+            array('value' => 'cc_type', 'label' => Mage::helper('adminhtml')->__('Credit Card Type')),
             array('value' => 'base_subtotal', 'label' => Mage::helper('adminhtml')->__('Subtotal (Base)')),
             array('value' => 'subtotal', 'label' => Mage::helper('adminhtml')->__('Subtotal (Purchased)')),
             array('value' => 'base_grand_total', 'label' => Mage::helper('adminhtml')->__('G.T. (Base)')),

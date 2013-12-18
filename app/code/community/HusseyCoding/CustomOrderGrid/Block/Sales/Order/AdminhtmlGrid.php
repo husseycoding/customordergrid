@@ -55,11 +55,11 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
             );
         endif;
         
-        if (in_array('method', $this->_selected)):
+        if (in_array('method', $this->_selected) || in_array('cc_type', $this->_selected)):
             $select->join(
                 array('payment_method' => $resource->getTableName('sales/order_payment')),
                 'order.entity_id = payment_method.parent_id',
-                array('method')
+                array('method', 'cc_type')
             );
         endif;
         
@@ -343,6 +343,15 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
                     'filter_index' => 'payment_method.method',
                     'type'  => 'options',
                     'options' => Mage::helper('customordergrid')->paymentMethods()
+                ));
+                break;
+            case 'cc_type':
+                $this->addColumn('cc_type', array(
+                    'header' => Mage::helper('sales')->__('Credit Card Type'),
+                    'index' => 'cc_type',
+                    'filter_index' => 'payment_method.cc_type',
+                    'type'  => 'options',
+                    'options' => Mage::helper('customordergrid')->ccTypes()
                 ));
                 break;
             case 'total_item_count':

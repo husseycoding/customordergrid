@@ -21,6 +21,16 @@ class HusseyCoding_CustomOrderGrid_Helper_Data extends Mage_Core_Helper_Abstract
         return $data;
     }
     
+    public function ccTypes()
+    {
+        $data = array();
+        foreach (Mage::getModel('payment/config')->getCcTypes() as $code => $title):
+            $data[$code] = $title;
+        endforeach;
+        
+        return $data;
+    }
+    
     public function shippingMethods()
     {
         $data = array();

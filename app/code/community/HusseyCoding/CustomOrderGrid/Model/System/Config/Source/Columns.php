@@ -13,7 +13,8 @@ class HusseyCoding_CustomOrderGrid_Model_System_Config_Source_Columns
                     array('value' => 'status', 'label' => Mage::helper('adminhtml')->__('Status')),
                     array('value' => 'shipping_method', 'label' => Mage::helper('adminhtml')->__('Shipping Method')),
                     array('value' => 'order_currency_code', 'label' => Mage::helper('adminhtml')->__('Currency')),
-                    array('value' => 'method', 'label' => Mage::helper('adminhtml')->__('Payment Method'))
+                    array('value' => 'method', 'label' => Mage::helper('adminhtml')->__('Payment Method')),
+                    array('value' => 'cc_type', 'label' => Mage::helper('adminhtml')->__('Credit Card Type'))
                 ),
             ),
             array(
