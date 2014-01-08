@@ -2,11 +2,14 @@
 <config>
     <modules>
         <HusseyCoding_CustomOrderGrid>
-            <version>1.1.1</version>
+            <version>1.1.2</version>
         </HusseyCoding_CustomOrderGrid>
     </modules>
     <global>
         <blocks>
+            <customordergrid>
+                <class>HusseyCoding_CustomOrderGrid_Block</class>
+            </customordergrid>
             <adminhtml>
                 <rewrite>
                     <sales_order_grid>HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid</sales_order_grid>

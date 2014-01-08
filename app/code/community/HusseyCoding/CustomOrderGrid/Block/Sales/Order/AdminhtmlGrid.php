@@ -12,7 +12,7 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
         $columnsort = Mage::getStoreConfig('customordergrid/configure/columnsort');
         $selected = Mage::getStoreConfig('customordergrid/configure/columnsorder');
         $this->_selected = isset($selected) && $selected ? explode(',', $selected) : false;
-        if (!$columnsort):
+        if (!$columnsort || $columnsort == 'tracking_number'):
             $columnsort = 'real_order_id';
         endif;
         $sortdirection = Mage::getStoreConfig('customordergrid/configure/sortdirection') ? Mage::getStoreConfig('customordergrid/configure/sortdirection') : 'DESC';
@@ -402,6 +402,24 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
                     'header' => Mage::helper('sales')->__('Ship to Country'),
                     'index' => 'shipping_country',
                     'filter_index' => 'shipping.country_id'
+                ));
+                break;
+            case 'tracking_number':
+                $this->addColumn('tracking_number', array(
+                    'header' => Mage::helper('sales')->__('Tracking Number'),
+                    'index' => 'tracking_number',
+                    'renderer' => 'customordergrid/sales_order_grid_renderer_trackingNumber',
+                    'filter' => false,
+                    'sortable' => false
+                ));
+                break;
+            case 'base_discount_amount':
+                $this->addColumn('base_discount_amount', array(
+                    'header' => Mage::helper('sales')->__('Discount (Base)'),
+                    'index' => 'base_discount_amount',
+                    'filter_index' => 'order.base_discount_amount',
+                    'type' => 'currency',
+                    'currency' => 'base_currency_code'
                 ));
                 break;
         endswitch;

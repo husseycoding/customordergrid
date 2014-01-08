@@ -12,6 +12,7 @@ class HusseyCoding_CustomOrderGrid_Model_System_Config_Source_Columns
                     array('value' => 'updated_at', 'label' => Mage::helper('adminhtml')->__('Order Modified')),
                     array('value' => 'status', 'label' => Mage::helper('adminhtml')->__('Status')),
                     array('value' => 'shipping_method', 'label' => Mage::helper('adminhtml')->__('Shipping Method')),
+                    array('value' => 'tracking_number', 'label' => Mage::helper('adminhtml')->__('Tracking Number')),
                     array('value' => 'order_currency_code', 'label' => Mage::helper('adminhtml')->__('Currency')),
                     array('value' => 'method', 'label' => Mage::helper('adminhtml')->__('Payment Method')),
                     array('value' => 'cc_type', 'label' => Mage::helper('adminhtml')->__('Credit Card Type'))
@@ -27,7 +28,9 @@ class HusseyCoding_CustomOrderGrid_Model_System_Config_Source_Columns
                     array('value' => 'base_tax_amount', 'label' => Mage::helper('adminhtml')->__('Tax (Base)')),
                     array('value' => 'tax_amount', 'label' => Mage::helper('adminhtml')->__('Tax (Purchased)')),
                     array('value' => 'base_shipping_amount', 'label' => Mage::helper('adminhtml')->__('Shipping (Base)')),
-                    array('value' => 'shipping_amount', 'label' => Mage::helper('adminhtml')->__('Shipping (Purchased)'))
+                    array('value' => 'shipping_amount', 'label' => Mage::helper('adminhtml')->__('Shipping (Purchased)')),
+                    array('value' => 'base_discount_amount', 'label' => Mage::helper('adminhtml')->__('Discount (Base)')),
+                    array('value' => 'discount_amount', 'label' => Mage::helper('adminhtml')->__('Discount (Purchased)'))
                 ),
             ),
             array(
