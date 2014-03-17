@@ -29,6 +29,7 @@ class HusseyCoding_CustomOrderGrid_Model_System_Config_Source_Sort
             array('value' => 'is_virtual', 'label' => Mage::helper('adminhtml')->__('Is Virtual')),
             array('value' => 'coupon_code', 'label' => Mage::helper('adminhtml')->__('Coupon Code')),
             array('value' => 'total_item_count', 'label' => Mage::helper('adminhtml')->__('Product Count')),
+            array('value' => 'total_qty_ordered', 'label' => Mage::helper('adminhtml')->__('Product Quantity')),
             array('value' => 'billing_name', 'label' => Mage::helper('adminhtml')->__('Billing Name')),
             array('value' => 'shipping_name', 'label' => Mage::helper('adminhtml')->__('Ship to Name')),
             array('value' => 'billing_company', 'label' => Mage::helper('adminhtml')->__('Billing Company')),

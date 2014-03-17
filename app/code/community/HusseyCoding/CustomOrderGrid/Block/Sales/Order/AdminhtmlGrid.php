@@ -362,6 +362,14 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
                     'type'  => 'currency'
                 ));
                 break;
+            case 'total_qty_ordered':
+                $this->addColumn('total_qty_ordered', array(
+                    'header' => Mage::helper('sales')->__('Product Quantity'),
+                    'index' => 'total_qty_ordered',
+                    'filter_index' => 'order.total_qty_ordered',
+                    'type'  => 'currency'
+                ));
+                break;
             case 'billing_postcode':
                 $this->addColumn('billing_postcode', array(
                     'header' => Mage::helper('sales')->__('Billing Postcode'),

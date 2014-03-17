@@ -40,7 +40,8 @@ class HusseyCoding_CustomOrderGrid_Model_System_Config_Source_Columns
                     array('value' => 'name', 'label' => Mage::helper('adminhtml')->__('Product Name')),
                     array('value' => 'is_virtual', 'label' => Mage::helper('adminhtml')->__('Is Virtual')),
                     array('value' => 'coupon_code', 'label' => Mage::helper('adminhtml')->__('Coupon Code')),
-                    array('value' => 'total_item_count', 'label' => Mage::helper('adminhtml')->__('Product Count'))
+                    array('value' => 'total_item_count', 'label' => Mage::helper('adminhtml')->__('Product Count')),
+                    array('value' => 'total_qty_ordered', 'label' => Mage::helper('adminhtml')->__('Product Quantity'))
                 ),
             ),
             array(
