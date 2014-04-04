@@ -26,14 +26,25 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
     {
         if (!$this->_selected || !$this->_enabled) return parent::_prepareCollection();
         
-        $collection = Mage::getResourceModel($this->_getCollectionClass());
+        $collection = Mage::getResourceModel($this->_getCollectionClass())
+            ->addAttributeToSelect('entity_id')
+            ->addAttributeToSelect('shipping_name')
+            ->addAttributeToSelect('billing_name')
+            ->addAttributeToSelect('increment_id')
+            ->addAttributeToSelect('store_id')
+            ->addAttributeToSelect('created_at')
+            ->addAttributeToSelect('base_grand_total')
+            ->addAttributeToSelect('grand_total')
+            ->addAttributeToSelect('status');
         $select = $collection->getSelect();
         $resource = Mage::getSingleton('core/resource');
         
         $select
             ->join(
                 array('order' => $resource->getTableName('sales/order')),
-                'main_table.entity_id = order.entity_id'
+                'main_table.entity_id = order.entity_id',
+                array('is_virtual','shipping_method','coupon_code','customer_email','base_shipping_amount','shipping_amount','base_subtotal','subtotal','base_tax_amount','tax_amount','customer_is_guest',
+                       'order_currency_code','total_qty_ordered','base_discount_amount','total_item_count')
             );
         
         $billing = array('billing_company', 'billing_postcode', 'billing_region', 'billing_country');
