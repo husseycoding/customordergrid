@@ -114,7 +114,7 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
         ));
         
         foreach ($this->_selected as $column):
-            $this->addNewColumn($column);
+            $this->_addNewColumn($column);
         endforeach;
 
         if (Mage::getSingleton('admin/session')->isAllowed('sales/order/actions/view')) {
@@ -145,7 +145,7 @@ class HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid extends Mage_
         return $this->sortColumnsByOrder();
     }
     
-    private function addNewColumn($column)
+    private function _addNewColumn($column)
     {
         switch ($column):
             case 'store_id':
