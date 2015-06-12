@@ -10,16 +10,16 @@
             <customordergrid>
                 <class>HusseyCoding_CustomOrderGrid_Block</class>
             </customordergrid>
-            <adminhtml>
-                <rewrite>
-                    <sales_order_grid>HusseyCoding_CustomOrderGrid_Block_Sales_Order_AdminhtmlGrid</sales_order_grid>
-                </rewrite>
-            </adminhtml>
         </blocks>
         <models>
             <customordergrid>
                 <class>HusseyCoding_CustomOrderGrid_Model</class>
             </customordergrid>
+            <sales_resource>
+                <rewrite>
+                    <order_grid_collection>HusseyCoding_CustomOrderGrid_Model_Resource_Sales_Order_Grid</order_grid_collection>
+                </rewrite>
+            </sales_resource>
         </models>
         <helpers>
             <customordergrid>
@@ -35,5 +35,25 @@
                 </customordergrid>
             </updates>
         </layout>
+        <events>
+            <sales_order_grid_collection_load_before>
+                <observers>
+                    <husseycoding_customordergrid>
+                        <type>model</type>
+                        <class>HusseyCoding_CustomOrderGrid_Model_Observer</class>
+                        <method>salesOrderGridCollectionLoadBefore</method>
+                    </husseycoding_customordergrid>
+                </observers>
+            </sales_order_grid_collection_load_before>
+            <core_block_abstract_prepare_layout_before>
+                <observers>
+                    <husseycoding_customordergrid>
+                        <type>model</type>
+                        <class>HusseyCoding_CustomOrderGrid_Model_Observer</class>
+                        <method>appendColumns</method>
+                    </husseycoding_customordergrid>
+                </observers>
+            </core_block_abstract_prepare_layout_before>
+        </events>
     </adminhtml>
 </config>
