@@ -8,7 +8,7 @@ var selected = Class.create({
         }
         this.getText();
         Event.observe($("customordergrid_configure_columns"), "change", this.updateForm.bindAsEventListener(this));
-        $('row_customordergrid_configure_columns').insert({ after: '<tr><td class="label">Column Display Order</td><td id="displaycolumnorder" class="value"></td></tr>' });
+        $('row_customordergrid_configure_columns').insert({ after: '<tr><td class="label">Column Display Order <br> ( Drag and Drop to move order )</td><td id="displaycolumnorder" class="value"></td></tr>' });
         this.outputOrder();
         this.updateSortElement();
     },
@@ -48,8 +48,10 @@ var selected = Class.create({
     },
     getText: function() {
         this.valuetext = {};
+        this.reverseValueText = {};
         for (var i = 0; i < $("customordergrid_configure_columns").options.length; i++) {
             this.valuetext[$("customordergrid_configure_columns").options[i].value] = $("customordergrid_configure_columns").options[i].text;
+            this.reverseValueText[$("customordergrid_configure_columns").options[i].text] = $("customordergrid_configure_columns").options[i].value;
         }
     },
     outputOrder: function() {
@@ -57,14 +59,15 @@ var selected = Class.create({
         var hidden = new Array();
         this.userselected.each(function(s) {
             if (this.valuetext[s]) {
-                html.push(this.valuetext[s]);
+                html.push('<li class="sortables" >' + this.valuetext[s] + '</li>');
                 hidden.push(s);
             }
         }.bind(this));
         hidden = hidden.join(",");
-        html = html.join("<br />");
+        html = html.join('');
         $("customordergrid_configure_columnsorder").value = hidden;
         $("displaycolumnorder").update(html);
+        this.createSortable();
     },
     updateSortElement: function() {
         for (var i = 0; i < $("customordergrid_configure_columnsort").options.length; i++) {
@@ -79,6 +82,23 @@ var selected = Class.create({
                 el.disabled = true;
             }
         }
+    },
+    createSortable: function() {
+        var localRVT = this.reverseValueText;
+        Sortable.create('displaycolumnorder',
+            {
+                tag:'li',
+                onChange: function()
+                {
+                    var liSort = $$('li.sortables');
+                    var string = '';
+                    for (var i = 0, len = liSort.length; i < len; i++) {
+                            string += localRVT[liSort[i].innerHTML];
+                            if (i < len - 1) string += ',';
+                    }
+                    $('customordergrid_configure_columnsorder').value = string;
+                }
+            });
     }
 });
 
