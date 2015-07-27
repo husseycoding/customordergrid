@@ -85,14 +85,26 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
 
             $selected = Mage::getStoreConfig('customordergrid/configure/columnsorder');
             $this->_selected = isset($selected) && $selected ? explode(',', $selected) : false;
+            $widths = Mage::getStoreConfig('customordergrid/configure/columnswidth');
+            $widths = isset($widths) ? explode(',', $widths) : false;
+            $columnWidths = array();
+            $i = 0;
+            foreach($widths as $width)
+            {
+                $split = explode(':', $width[$i]);
+                $split[1] = preg_replace('/\D/', '', $split[1]); //remove all non integer chars
+                $columnWidths[$split[0]] = $split[1];
+                $i++;
+            }
 
             foreach ($this->_selected as $column):
-                $this->_addNewColumn($column, $block);
+                $width = ($columnWidths[$column] == "") ? '80px' : $columnWidths[$column] . 'px';
+                $this->_addNewColumn($column, $block, $width);
             endforeach;
         }
     }
 
-    private function _addNewColumn($column, $block)
+    private function _addNewColumn($column, $block, $width)
     {
         switch ($column):
             case 'store_id':
@@ -113,7 +125,7 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'created_at',
                     'filter_index' => 'main_table.created_at',
                     'type' => 'datetime',
-                    'width' => '100px'
+                    'width' => $width
                 ));
                 break;
             case 'updated_at':
@@ -122,19 +134,21 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'updated_at',
                     'filter_index' => 'main_table.updated_at',
                     'type' => 'datetime',
-                    'width' => '100px'
+                    'width' => $width
                 ));
                 break;
             case 'billing_name':
                 $block->addColumn('billing_name', array(
                     'header' => Mage::helper('sales')->__('Bill to Name'),
-                    'index' => 'billing_name'
+                    'index' => 'billing_name',
+                    'width' => $width
                 ));
                 break;
             case 'shipping_name':
                 $block->addColumn('shipping_name', array(
                     'header' => Mage::helper('sales')->__('Ship to Name'),
-                    'index' => 'shipping_name'
+                    'index' => 'shipping_name',
+                    'width' => $width
                 ));
                 break;
             case 'base_grand_total':
@@ -143,7 +157,8 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'base_grand_total',
                     'filter_index' => 'main_table.base_grand_total',
                     'type'  => 'currency',
-                    'currency' => 'base_currency_code'
+                    'currency' => 'base_currency_code',
+                    'width' => $width
                 ));
                 break;
             case 'grand_total':
@@ -153,20 +168,23 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'filter_index' => 'main_table.grand_total',
                     'type'  => 'currency',
                     'currency' => 'order_currency_code',
+                    'width' => $width
                 ));
                 break;
             case 'billing_company':
                 $block->addColumn('billing_company', array(
                     'header' => Mage::helper('sales')->__('Billing Company'),
                     'index' => 'billing_company',
-                    'filter_index' => 'billing.company'
+                    'filter_index' => 'billing.company',
+                    'width' => $width
                 ));
                 break;
             case 'shipping_company':
                 $block->addColumn('shipping_company', array(
                     'header' => Mage::helper('sales')->__('Ship to Company'),
                     'index' => 'shipping_company',
-                    'filter_index' => 'shipping.company'
+                    'filter_index' => 'shipping.company',
+                    'width' => $width
                 ));
                 break;
             case 'status':
@@ -175,7 +193,7 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'status',
                     'filter_index' => 'main_table.status',
                     'type'  => 'options',
-                    'width' => '70px',
+                    'width' => $width,
                     'options' => Mage::getSingleton('sales/order_config')->getStatuses()
                 ));
                 break;
@@ -183,7 +201,7 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                 $block->addColumn('sku', array(
                     'header' => Mage::helper('sales')->__('SKU'),
                     'index' => 'sku',
-                    'width' => '80px',
+                    'width' => $width,
                     'filter_condition_callback' => array('HusseyCoding_CustomOrderGrid_Helper_Data', 'filterSkus')
                 ));
                 break;
@@ -191,7 +209,8 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                 $block->addColumn('name', array(
                     'header' => Mage::helper('sales')->__('Product Name'),
                     'index' => 'name',
-                    'filter_index' => 'sku_table.name'
+                    'filter_index' => 'sku_table.name',
+                    'width' => $width
                 ));
                 break;
             case 'is_virtual':
@@ -200,6 +219,7 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'is_virtual',
                     'filter_index' => 'order.is_virtual',
                     'type' => 'options',
+                    'width' => $width,
                     'options' => Mage::helper('customordergrid')->virtualStatuses()
                 ));
                 break;
@@ -208,19 +228,22 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'header' => Mage::helper('sales')->__('Shipping Method'),
                     'index' => 'shipping_method',
                     'type'  => 'options',
+                    'width' => $width,
                     'options' => Mage::helper('customordergrid')->shippingMethods()
                 ));
                 break;
             case 'coupon_code':
                 $block->addColumn('coupon_code', array(
                     'header' => Mage::helper('sales')->__('Coupon Code'),
-                    'index' => 'coupon_code'
+                    'index' => 'coupon_code',
+                    'width' => $width
                 ));
                 break;
             case 'customer_email':
                 $block->addColumn('customer_email', array(
                     'header' => Mage::helper('sales')->__('Customer Email'),
-                    'index' => 'customer_email'
+                    'index' => 'customer_email',
+                    'width' => $width
                 ));
                 break;
             case 'base_shipping_amount':
@@ -229,7 +252,8 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'base_shipping_amount',
                     'filter_index' => 'order.base_shipping_amount',
                     'type'  => 'currency',
-                    'currency' => 'base_currency_code'
+                    'currency' => 'base_currency_code',
+                    'width' => $width
                 ));
                 break;
             case 'shipping_amount':
@@ -238,7 +262,8 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'shipping_amount',
                     'filter_index' => 'order.shipping_amount',
                     'type'  => 'currency',
-                    'currency' => 'order_currency_code'
+                    'currency' => 'order_currency_code',
+                    'width' => $width
                 ));
                 break;
             case 'base_subtotal':
@@ -247,7 +272,8 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'base_subtotal',
                     'filter_index' => 'order.base_subtotal',
                     'type'  => 'currency',
-                    'currency' => 'base_currency_code'
+                    'currency' => 'base_currency_code',
+                    'width' => $width
                 ));
                 break;
             case 'subtotal':
@@ -256,7 +282,8 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'subtotal',
                     'filter_index' => 'order.subtotal',
                     'type'  => 'currency',
-                    'currency' => 'order_currency_code'
+                    'currency' => 'order_currency_code',
+                    'width' => $width
                 ));
                 break;
             case 'base_tax_amount':
@@ -265,7 +292,8 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'base_tax_amount',
                     'filter_index' => 'order.base_tax_amount',
                     'type'  => 'currency',
-                    'currency' => 'base_currency_code'
+                    'currency' => 'base_currency_code',
+                    'width' => $width
                 ));
                 break;
             case 'tax_amount':
@@ -274,7 +302,8 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'tax_amount',
                     'filter_index' => 'order.tax_amount',
                     'type'  => 'currency',
-                    'currency' => 'order_currency_code'
+                    'currency' => 'order_currency_code',
+                    'width' => $width
                 ));
                 break;
             case 'customer_is_guest':
@@ -283,7 +312,7 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'customer_is_guest',
                     'filter_index' => 'order.customer_is_guest',
                     'type'  => 'options',
-                    'width' => '70px',
+                    'width' => $width,
                     'options' => Mage::helper('customordergrid')->registeredStatuses()
                 ));
                 break;
@@ -292,7 +321,7 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'header' => Mage::helper('sales')->__('Currency'),
                     'index' => 'order_currency_code',
                     'filter_index' => 'order.order_currency_code',
-                    'width' => '70px'
+                    'width' => $width
                 ));
                 break;
             case 'method':
@@ -301,7 +330,8 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'method',
                     'filter_index' => 'payment_method.method',
                     'type'  => 'options',
-                    'options' => Mage::helper('customordergrid')->paymentMethods()
+                    'options' => Mage::helper('customordergrid')->paymentMethods(),
+                    'width' => $width
                 ));
                 break;
             case 'cc_type':
@@ -310,7 +340,8 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'cc_type',
                     'filter_index' => 'payment_method.cc_type',
                     'type'  => 'options',
-                    'options' => Mage::helper('customordergrid')->ccTypes()
+                    'options' => Mage::helper('customordergrid')->ccTypes(),
+                    'width' => $width
                 ));
                 break;
             case 'total_item_count':
@@ -318,7 +349,8 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'header' => Mage::helper('sales')->__('Product Count'),
                     'index' => 'total_item_count',
                     'filter_index' => 'order.total_item_count',
-                    'type'  => 'currency'
+                    'type'  => 'currency',
+                    'width' => $width
                 ));
                 break;
             case 'total_qty_ordered':
@@ -326,49 +358,56 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'header' => Mage::helper('sales')->__('Product Quantity'),
                     'index' => 'total_qty_ordered',
                     'filter_index' => 'order.total_qty_ordered',
-                    'type'  => 'currency'
+                    'type'  => 'currency',
+                    'width' => $width
                 ));
                 break;
             case 'billing_postcode':
                 $block->addColumn('billing_postcode', array(
                     'header' => Mage::helper('sales')->__('Billing Postcode'),
                     'index' => 'billing_postcode',
-                    'filter_index' => 'billing.postcode'
+                    'filter_index' => 'billing.postcode',
+                    'width' => $width
                 ));
                 break;
             case 'shipping_postcode':
                 $block->addColumn('shipping_postcode', array(
                     'header' => Mage::helper('sales')->__('Ship to Postcode'),
                     'index' => 'shipping_postcode',
-                    'filter_index' => 'shipping.postcode'
+                    'filter_index' => 'shipping.postcode',
+                    'width' => $width
                 ));
                 break;
             case 'billing_region':
                 $block->addColumn('billing_region', array(
                     'header' => Mage::helper('sales')->__('Billing Region'),
                     'index' => 'billing_region',
-                    'filter_index' => 'billing.region'
+                    'filter_index' => 'billing.region',
+                    'width' => $width
                 ));
                 break;
             case 'shipping_region':
                 $block->addColumn('shipping_region', array(
                     'header' => Mage::helper('sales')->__('Ship to Region'),
                     'index' => 'shipping_region',
-                    'filter_index' => 'shipping.region'
+                    'filter_index' => 'shipping.region',
+                    'width' => $width
                 ));
                 break;
             case 'billing_country':
                 $block->addColumn('billing_country', array(
                     'header' => Mage::helper('sales')->__('Billing Country'),
                     'index' => 'billing_country',
-                    'filter_index' => 'billing.country_id'
+                    'filter_index' => 'billing.country_id',
+                    'width' => $width
                 ));
                 break;
             case 'shipping_country':
                 $block->addColumn('shipping_country', array(
                     'header' => Mage::helper('sales')->__('Ship to Country'),
                     'index' => 'shipping_country',
-                    'filter_index' => 'shipping.country_id'
+                    'filter_index' => 'shipping.country_id',
+                    'width' => $width
                 ));
                 break;
             case 'tracking_number':
@@ -377,7 +416,8 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'tracking_number',
                     'renderer' => 'customordergrid/sales_order_grid_renderer_trackingNumber',
                     'filter' => false,
-                    'sortable' => false
+                    'sortable' => false,
+                    'width' => $width
                 ));
                 break;
             case 'base_discount_amount':
@@ -386,7 +426,8 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'index' => 'base_discount_amount',
                     'filter_index' => 'order.base_discount_amount',
                     'type' => 'currency',
-                    'currency' => 'base_currency_code'
+                    'currency' => 'base_currency_code',
+                    'width' => $width
                 ));
                 break;
         endswitch;
