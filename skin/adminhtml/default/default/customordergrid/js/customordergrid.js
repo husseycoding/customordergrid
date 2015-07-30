@@ -10,7 +10,7 @@ var selected = Class.create({
         this.getWidthArray();
         this.getText();
         Event.observe($("customordergrid_configure_columns"), "change", this.updateForm.bindAsEventListener(this));
-        $('row_customordergrid_configure_columns').insert({ after: '<tr><td class="label">Column Display Order <br><br><div style="font-size: 11px; width: 160px;"> (Drag and Drop column name to move order on the grid) <br> (Input column width in the box on the right. It will default to 80px if left blank)</div></td><td id="displaycolumnorder" class="value"></td></tr>' });
+        $('row_customordergrid_configure_columns').insert({ after: '<tr><td class="label">Column Display Order <br><br><div style="font-size: 11px; width: 160px;"> (<b>Drag</b> and <b>Drop</b> column name to move order on the grid) <br> (Input column width in the box on the right. It will default to 80px if left blank)</div></td><td id="displaycolumnorder" class="value"></td></tr>' });
         this.outputOrder();
         this.updateSortElement();
         this.observeWidthInput();

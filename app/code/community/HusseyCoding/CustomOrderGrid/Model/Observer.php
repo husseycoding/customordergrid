@@ -91,7 +91,7 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
             $i = 0;
             foreach($widths as $width)
             {
-                $split = explode(':', $width[$i]);
+                $split = explode(':', $width);
                 $split[1] = preg_replace('/\D/', '', $split[1]); //remove all non integer chars
                 $columnWidths[$split[0]] = $split[1];
                 $i++;
@@ -115,7 +115,8 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                         'filter_index' => 'main_table.store_id',
                         'type'      => 'store',
                         'store_view'=> true,
-                        'display_deleted' => true
+                        'display_deleted' => true,
+                        'width' => $width
                     ));
                 }
                 break;
@@ -431,5 +432,17 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                 ));
                 break;
         endswitch;
+    }
+
+    public function filterSkus($collection, $column)
+    {
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+
+        $collection->getSelect()->having(
+            "group_concat(`sales_flat_order_item`.sku SEPARATOR ', ') like ?", "%$value%");
+
+        return $this;
     }
 }
