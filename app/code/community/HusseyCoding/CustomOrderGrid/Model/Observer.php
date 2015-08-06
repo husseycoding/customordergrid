@@ -58,7 +58,7 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
 
         if (in_array('sku', $this->_selected) || in_array('name', $this->_selected)):
             $select->joinLeft('sales_flat_order_item',
-                'sales_flat_order_item.order_id = main_table.entity_id',
+                'sales_flat_order_item.order_id = main_table.entity_id AND sales_flat_order_item.product_type="simple"',
                 array('sku' => new Zend_Db_Expr('group_concat(sales_flat_order_item.sku SEPARATOR ", ")'), 'name' => new Zend_Db_Expr('group_concat(sales_flat_order_item.name SEPARATOR ", ")'))
             );
             $select->group('main_table.entity_id');
@@ -202,8 +202,7 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                 $block->addColumn('sku', array(
                     'header' => Mage::helper('sales')->__('SKU'),
                     'index' => 'sku',
-                    'width' => $width,
-                    'filter_condition_callback' => array('HusseyCoding_CustomOrderGrid_Helper_Data', 'filterSkus')
+                    'width' => $width
                 ));
                 break;
             case 'name':
@@ -432,17 +431,5 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                 ));
                 break;
         endswitch;
-    }
-
-    public function filterSkus($collection, $column)
-    {
-        if (!$value = $column->getFilter()->getValue()) {
-            return $this;
-        }
-
-        $collection->getSelect()->having(
-            "group_concat(`sales_flat_order_item`.sku SEPARATOR ', ') like ?", "%$value%");
-
-        return $this;
     }
 }

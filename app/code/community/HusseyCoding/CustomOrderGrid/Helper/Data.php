@@ -49,15 +49,4 @@ class HusseyCoding_CustomOrderGrid_Helper_Data extends Mage_Core_Helper_Abstract
         
         return $data;
     }
-
-    public function filterSkus($collection, $column)
-    {
-        if (!$value = $column->getFilter()->getValue()) {
-            return $this;
-        }
-
-        //todo find a query to sort SKUs
-
-        return $this;
-    }
 }
