@@ -1,0 +1,21 @@
+{
+    "name":"husseycoding/customordergrid",
+    "type":"magento-module",
+    "license":"OSL-3.0",
+    "homepage":"https://github.com/husseycoding/customordergrid",
+    "description":"Sort and filter the sales order grid by many different columns.",
+    "authors":[
+        {
+            "name":"Jonathan Hussey",
+            "email":"hussey@husseycoding.co.uk"
+        },
+        {
+            "name":"Nicolas Belisle",
+            "email":"nico@husseycoding.co.uk"
+        }
+    ],
+    "require":{
+        "magento-hackathon/magento-composer-installer":"*"
+    }
+}
+
