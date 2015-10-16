@@ -7,10 +7,11 @@ var selected = Class.create({
         } else {
             this.userselected = new Array();
         }
+        this.selectedwidths = {};
         this.getWidthArray();
         this.getText();
         Event.observe($("customordergrid_configure_columns"), "change", this.updateForm.bindAsEventListener(this));
-        $('row_customordergrid_configure_columns').insert({ after: '<tr><td class="label">Column Display Order <br><br><div style="font-size: 11px; width: 160px;"> (<b>Drag</b> and <b>Drop</b> column name to move order on the grid) <br> (Input column width in the box on the right. It will default to 80px if left blank)</div></td><td id="displaycolumnorder" class="value"></td></tr>' });
+        $("row_customordergrid_configure_columns").insert({ after: "<tr><td></td><td class=\"value\"><div style=\"width:240px; display:inline-block\"><span style=\"font-weight:bold\">Column</span> - drag to order</div><div style=\"display:inline-block; font-weight:bold\">Width</div></td></tr><tr><td class=\"label\">Column Display Order</td><td id=\"displaycolumnorder\" class=\"value\"></td></tr>" });
         this.outputOrder();
         this.updateSortElement();
         this.observeWidthInput();
@@ -19,8 +20,8 @@ var selected = Class.create({
         if (this.userselected.indexOf(id) == -1) {
             this.userselected.push(id);
         }
-        if(typeof this.selectedWidths[id] === 'undefined') {
-            this.selectedWidths[id] = "";
+        if (!this.selectedwidths[id]) {
+            this.selectedwidths[id] = "";
         }
     },
     removeColumn: function(id) {
@@ -55,10 +56,10 @@ var selected = Class.create({
     },
     getText: function() {
         this.valuetext = {};
-        this.reverseValueText = {};
+        this.reversevaluetext = {};
         for (var i = 0; i < $("customordergrid_configure_columns").options.length; i++) {
             this.valuetext[$("customordergrid_configure_columns").options[i].value] = $("customordergrid_configure_columns").options[i].text;
-            this.reverseValueText[$("customordergrid_configure_columns").options[i].text] = $("customordergrid_configure_columns").options[i].value;
+            this.reversevaluetext[$("customordergrid_configure_columns").options[i].text] = $("customordergrid_configure_columns").options[i].value;
         }
     },
     outputOrder: function() {
@@ -66,14 +67,13 @@ var selected = Class.create({
         var hidden = new Array();
         this.userselected.each(function(s) {
             if (this.valuetext[s]) {
-                var widthValue = (typeof this.selectedWidths[s] === 'undefined') ? "" : this.selectedWidths[s];
-                html.push('<div class="sortables" ><li class="sortableValues" style="width: 200px; display: inline-block; cursor: grab;">' + this.valuetext[s] +
-                '</li><input class="widthInput" type="text" name="' + this.reverseValueText[this.valuetext[s]] + '" value="' + widthValue + '" size="1" style="float: right; display: inline-block;"></div>');
+                var widthvalue = !this.selectedwidths[s] ? "" : this.selectedwidths[s];
+                html.push("<div class=\"sortables\"><li class=\"sortablevalues\" style=\"width:240px; display:inline-block; cursor:grab\">" + this.valuetext[s] + "</li><input class=\"widthinput\" type=\"text\" name=\"" + this.reversevaluetext[this.valuetext[s]] + "\" value=\"" + widthvalue + "\" style=\"display:inline-block; width:34px\"></div>");
                 hidden.push(s);
             }
         }.bind(this));
         hidden = hidden.join(",");
-        html = html.join('');
+        html = html.join("");
         $("customordergrid_configure_columnsorder").value = hidden;
         $("displaycolumnorder").update(html);
         this.createSortable();
@@ -81,7 +81,7 @@ var selected = Class.create({
     updateSortElement: function() {
         for (var i = 0; i < $("customordergrid_configure_columnsort").options.length; i++) {
             var el = $("customordergrid_configure_columnsort").options[i];
-            if (this.userselected.indexOf(el.value) >= 0) {
+            if (this.userselected.indexOf(el.value) >= 0 && el.value != "tracking_number") {
                 el.disabled = false;
             } else if (el.value && el.value != "real_order_id") {
                 if (el.selected) {
@@ -93,44 +93,46 @@ var selected = Class.create({
         }
     },
     createSortable: function() {
-        var reverseT = this.reverseValueText;
-        Sortable.create('displaycolumnorder',
-            {
-                tag:'div',
-                onChange: function()
-                {
-                    var liSort = $$('li.sortableValues');
-                    var string = '';
-                    for (var i = 0, len = liSort.length; i < len; i++) {
-                        string += reverseT[liSort[i].innerHTML];
-                        if (i < len - 1) string += ',';
-                    }
-                    $('customordergrid_configure_columnsorder').value = string;
+        Sortable.create("displaycolumnorder", {
+                tag:"div",
+                onChange: function() {
+                    var widths = new Array();
+                    var columns = new Array();
+                    $$("input.widthinput").each(function(e) {
+                        widths.push(e.name + ":" + e.value);
+                        columns.push(e.name);
+                    }.bind(this));
+                    widths = widths.join(",");
+                    columns = columns.join(",");
+                    $("customordergrid_configure_columnswidth").value = widths;
+                    $("customordergrid_configure_columnsorder").value = columns;
+                    $("customordergrid_configure_columns").value = columns;
+                    
                 }
-            });
+            }
+        );
     },
     observeWidthInput: function() {
-        $$('.widthInput').invoke('observe', 'keyup', function() {
-            var inputWidth = $$('input.widthInput');
-            var string = '';
-            for (var i = 0, len = inputWidth.length; i < len; i++) {
-                string += inputWidth[i].name + ':' + inputWidth[i].value;
-                if (i < len - 1) string += ',';
-            }
-            $('customordergrid_configure_columnswidth').value = string;
-        });
+        $$("input.widthinput").each(function(e) {
+            e.observe("change", function() {
+                var string = new Array();
+                $$("input.widthinput").each(function(el) {
+                    string.push(el.name + ":" + el.value);
+                }.bind(this));
+                string = string.join(",");
+                $("customordergrid_configure_columnswidth").value = string;
+            }.bind(this));
+        }.bind(this));
     },
     getWidthArray: function() {
         if ($("customordergrid_configure_columnswidth").value) {
-            this.selectedWidths = new Array();
-            var temp  = $("customordergrid_configure_columnswidth").value.split(",");
-            for(var i = 0; i < temp.length; i++){
-                var spl = temp[i].split(':');
-                this.selectedWidths[spl[0]] = spl[1];
-            }
-
-        } else {
-            this.selectedWidths = new Array();
+            var splitwidths = $("customordergrid_configure_columnswidth").value.split(",");
+            splitwidths.each(function(e) {
+                var splitwidth = e.split(":");
+                var column = splitwidth.shift();
+                var width = splitwidth.shift();
+                this.selectedwidths[column] = width;
+            }.bind(this));
         }
     }
 });

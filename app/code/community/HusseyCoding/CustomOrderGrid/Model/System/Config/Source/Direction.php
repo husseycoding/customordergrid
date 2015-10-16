@@ -1,5 +1,4 @@
 <?php
-
 class HusseyCoding_CustomOrderGrid_Model_System_Config_Source_Direction
 {
     public function toOptionArray()
