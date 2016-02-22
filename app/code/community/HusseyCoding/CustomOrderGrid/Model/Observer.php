@@ -94,9 +94,10 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
             endif;
             
             if (in_array('sku', $selected) || in_array('name', $selected)):
-                $select->joinLeft('sales_flat_order_item',
-                    'sales_flat_order_item.order_id = main_table.entity_id AND sales_flat_order_item.product_type = "simple"',
-                    array('sku' => new Zend_Db_Expr('GROUP_CONCAT(sales_flat_order_item.sku SEPARATOR ", ")'), 'name' => new Zend_Db_Expr('GROUP_CONCAT(sales_flat_order_item.name SEPARATOR ", ")'))
+                $select->joinLeft(
+                    array('items' => $resource->getTableName('sales/order_item')),
+                    'items.order_id = main_table.entity_id AND items.product_type = "simple"',
+                    array('sku' => new Zend_Db_Expr('GROUP_CONCAT(items.sku SEPARATOR ", ")'), 'name' => new Zend_Db_Expr('GROUP_CONCAT(items.name SEPARATOR ", ")'))
                 );
                 $select->group('main_table.entity_id');
             endif;
