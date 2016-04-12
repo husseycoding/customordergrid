@@ -44,6 +44,7 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                         $width = empty($columnWidths[$column]) ? null : $columnWidths[$column] . 'px';
                         $this->_addNewColumn($column, $block, $width);
                     endforeach;
+                    $block->getColumn('real_order_id')->addData(array('filter_index' => 'main_table.increment_id'));
                     $block->sortColumnsByOrder();
                 endif;
             endif;
@@ -209,7 +210,7 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                 $block->addColumnAfter('name', array(
                     'header' => Mage::helper('sales')->__('Product Name'),
                     'index' => 'name',
-                    'filter_index' => 'sku_table.name',
+                    'filter_index' => 'items.name',
                     'width' => $width
                 ), 'real_order_id');
                 break;
