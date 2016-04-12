@@ -41,6 +41,7 @@ class HusseyCoding_CustomOrderGrid_Model_System_Config_Source_Sort
             array('value' => 'billing_country', 'label' => Mage::helper('adminhtml')->__('Billing Country')),
             array('value' => 'shipping_country', 'label' => Mage::helper('adminhtml')->__('Ship to Country')),
             array('value' => 'customer_email', 'label' => Mage::helper('adminhtml')->__('Customer Email')),
+            array('value' => 'customer_group_id', 'label' => Mage::helper('adminhtml')->__('Customer Group')),
             array('value' => 'customer_is_guest', 'label' => Mage::helper('adminhtml')->__('Guest Checkout'))
         );
     }

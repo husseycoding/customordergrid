@@ -49,4 +49,14 @@ class HusseyCoding_CustomOrderGrid_Helper_Data extends Mage_Core_Helper_Abstract
         
         return $data;
     }
+    
+    public function customerGroups()
+    {
+        $data = array();
+        foreach (Mage::getResourceModel('customer/group_collection') as $group):
+            $data[$group->getCustomerGroupId()] = $group->getCustomerGroupCode();
+        endforeach;
+        
+        return $data;
+    }
 }
