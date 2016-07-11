@@ -361,7 +361,7 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'header' => Mage::helper('sales')->__('Product Count'),
                     'index' => 'total_item_count',
                     'filter_index' => 'order.total_item_count',
-                    'type'  => 'currency',
+                    'type'  => 'number',
                     'width' => $width
                 ), 'real_order_id');
                 break;
@@ -370,7 +370,7 @@ class HusseyCoding_CustomOrderGrid_Model_Observer extends Varien_Event_Observer
                     'header' => Mage::helper('sales')->__('Product Quantity'),
                     'index' => 'total_qty_ordered',
                     'filter_index' => 'order.total_qty_ordered',
-                    'type'  => 'currency',
+                    'type'  => 'number',
                     'width' => $width
                 ), 'real_order_id');
                 break;
