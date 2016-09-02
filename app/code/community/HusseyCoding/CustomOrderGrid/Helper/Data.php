@@ -17,6 +17,16 @@ class HusseyCoding_CustomOrderGrid_Helper_Data extends Mage_Core_Helper_Abstract
         foreach (Mage::getModel('payment/config')->getActiveMethods() as $method):
             $data[$method->getCode()] = $method->getTitle();
         endforeach;
+
+	    if (Mage::getConfig()->getNode('modules/Payone_Core')) {
+		    $storeId = 0;
+		    $payoneConfig = Mage::helper( 'payone_core/config' )->getConfigPayment( $storeId );
+		    $methods = $payoneConfig->getAvailableMethods();
+
+		    foreach ( $methods as $method ) {
+			    $data['payone_' . $method->getCode()] = $method->getName();
+		    }
+	    }
         
         return $data;
     }
